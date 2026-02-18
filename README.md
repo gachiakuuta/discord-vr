@@ -16,7 +16,15 @@ To prevent Meta from immediately using the code given to us by Discord once we a
 
 Now that we have an access token with the `activities.write` scope, we can request Discord to make a headless session using Meta's application ID and setting the platform to `meta_quest`, and voila: we now have the VR online status indicator.
 
-> This feature is still relatively new and may contain some subtle bugs. For example, in multiple occasions I was not able to see the VR indicator on my own account, but other people saw it just fine. If you use something like Vencord, you can use the `PlatformIndicators` plugin to see if you have an active VR session.
+## Some important notes
+
+Using this tool to create a new session may override your current online status (idle, dnd, invisible). This means that while using this application, other people can no longer see your real status unless they use a plugin like `PlatformIndicators`.
+
+![VR Status overriding actual status](/assets/status_override.png)
+
+> VR Status overriding actual status (Do not disturb)
+
+This feature is still relatively new and may contain some subtle bugs. For example, in multiple occasions I was not able to see the VR indicator on my own account, but other people saw it just fine. If you use something like Vencord, you can use the `PlatformIndicators` plugin to see if you have an active VR session.
 
 ## Setup & Usage
 
