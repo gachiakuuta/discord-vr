@@ -52,9 +52,7 @@ async fn main() -> Result<()> {
     let mut token = None;
 
     loop {
-        if auth.expires < Utc::now() + Duration::from_secs(5 * 60) {
-if auth.expires < Utc::now() + chrono::Duration::minutes(5) {
-
+        if auth.expires < Utc::now() + chrono::Duration::minutes(5) {
             auth = oauth::refresh_token(&auth.refresh_token).await?;
             auth.save(&auth_file).await?;
         }
@@ -118,8 +116,7 @@ async fn delete_status(
 ) -> Result<()> {
     client
         .post("https://discord.com/api/v10/users/@me/headless-sessions/delete")
-        let expires_in = response.expires_in().unwrap_or(Duration::from_secs(3600));
-
+        .header("Content-Type", "application/json")
         .bearer_auth(access_token)
         .json(&json!({
             "token": session_token,
@@ -132,15 +129,13 @@ async fn delete_status(
 }
 
 async fn wait() -> ControlFlow<()> {
-    _ = tokio::time::sleep(Duration::from_secs(60)) => {
-
-        _ = tokio::time::sleep(Duration::from_mins(1)) => {
+    tokio::select! {
+        _ = tokio::time::sleep(Duration::from_secs(60)) => {
             ControlFlow::Continue(())
         }
 
         _ = tokio::signal::ctrl_c() => {
             ControlFlow::Break(())
         }
-    let expires_in = response.expires_in().unwrap_or(Duration::from_secs(3600));
-
+    }
 }
