@@ -52,7 +52,7 @@ async fn main() -> Result<()> {
     let mut token = None;
 
     loop {
-        if auth.expires < Utc::now() + chrono::Duration::minutes(5) {
+        if auth.expires < Utc::now() + Duration::from_secs(5 * 60) {
             auth = oauth::refresh_token(&auth.refresh_token).await?;
             auth.save(&auth_file).await?;
         }
