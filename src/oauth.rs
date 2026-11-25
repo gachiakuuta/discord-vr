@@ -117,7 +117,7 @@ pub async fn request_token_interactive() -> Result<TokenInformation> {
         .request_async(&http_client)
         .await?;
 
-    let expires_in = response.expires_in().unwrap_or(Duration::from_hours(1));
+    let expires_in = response.expires_in().unwrap_or(Duration::from_secs(3600));
     let expires = Utc::now() + expires_in;
 
     Ok(TokenInformation::new(
