@@ -3,9 +3,8 @@ use std::{io::Write, path::Path, time::Duration};
 use anyhow::{Result, anyhow, bail};
 use chrono::{DateTime, Utc};
 use oauth2::{
-    AccessToken, AuthUrl, AuthorizationCode, ClientId, CsrfToken, PkceCodeChallenge, RedirectUrl,
-    RefreshToken, Scope, TokenResponse, TokenUrl, basic::BasicClient, reqwest::redirect::Policy,
-    url::Url,
+    AccessToken, AuthUrl, AuthorizationCode, ClientId, CsrfToken, RedirectUrl, RefreshToken, Scope,
+    TokenResponse, TokenUrl, basic::BasicClient, reqwest::redirect::Policy, url::Url,
 };
 use serde::{Deserialize, Serialize};
 use tokio::io::AsyncBufReadExt;
@@ -74,7 +73,6 @@ pub async fn request_token_interactive() -> Result<TokenInformation> {
         .set_auth_uri(
             AuthUrl::new(DISCORD_AUTHORIZE_URL.to_string()).expect("invalid authorize URL"),
         );
-    let (pkce_code_challenge, pkce_code_verifier) = PkceCodeChallenge::new_random_sha256();
 
     let http_client = oauth2::reqwest::Client::builder()
         .redirect(Policy::none())
@@ -86,7 +84,6 @@ pub async fn request_token_interactive() -> Result<TokenInformation> {
         .add_scope(Scope::new("identify".to_string()))
         .add_scope(Scope::new("activities.read".to_string()))
         .add_scope(Scope::new("activities.write".to_string()))
-        .set_pkce_challenge(pkce_code_challenge)
         .url();
 
     print!(
@@ -113,7 +110,6 @@ pub async fn request_token_interactive() -> Result<TokenInformation> {
 
     let response = client
         .exchange_code(code)
-        .set_pkce_verifier(pkce_code_verifier)
         .request_async(&http_client)
         .await?;
 
